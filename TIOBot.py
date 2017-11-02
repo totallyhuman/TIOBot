@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import requests
 import zlib
 
@@ -24,7 +27,8 @@ LANGUAGES = {
     'python': 'python3',
     'python 2': 'python2',
     'python 3': 'python3',
-    'ruby': 'ruby'
+    'ruby': 'ruby',
+    'rust': 'rust'
 }
 
 LANGLIST = [
@@ -44,7 +48,8 @@ LANGLIST = [
     'PHP',
     'Python 2',
     'Python 3',
-    'Ruby'
+    'Ruby',
+    'Rust'
 ]
 
 def execute(match, trigger):
@@ -67,11 +72,12 @@ TIOBot = Bot(
     long_help = ('I allow easy execution of code online!\n'
                  '\n'
                  'Commands:\n'
-                 '    !execute [language] | [code] -> The STDOUT and STDERR output after'
+                 '    !execute [language] -- [code] -> The STDOUT and STDERR output after'
                  ' execution of [code] in [language].\n'
                  '    !languages -> List of languages that I support.\n'
                  '\n'
-                 'by totallyhuman'
+                 'by totallyhuman\n'
+                 'My source code is here: https://github.com/totallyhuman/TIOBot'
     ),
     generic_ping = 'Pong!',
     specific_ping = 'Pong!',
