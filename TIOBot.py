@@ -57,7 +57,7 @@ LANGLIST = [
 def execute(match, trigger):
     try:
         req = bytes('Vlang\x001\x00{}\x00F.code.tio\x00{}\x00{}R'.format(
-            LANGUAGES[match[0].lower()], len(match[1]), match[1]), 'utf-8')
+            LANGUAGES[match[1].lower()], len(match[2]), match[2]), 'utf-8')
     except KeyError:
         return 'Language {} not found. See !languages for a list of languages I support.'.format(match[0])
 
@@ -66,7 +66,10 @@ def execute(match, trigger):
     res = requests.post('https://tio.run/cgi-bin/run/api/', req).text
     res = res.split(res[:16])[1:]
     
-    return ['Output:\n' + res[0], 'Debug:\n' + res[1]]
+    if match[0]:
+        return ['Output:\n' + res[0], 'Debug:\n' + '\n'.join(res[1].splitlines()[:-6])]
+
+    return 'Output:\n' + res[0]
 
 def list_languages(match, trigger):
     return ', '.join(LANGLIST)
@@ -86,8 +89,8 @@ TIOBot = Bot(
     long_help = ('I allow easy execution of code online!\n'
                  '\n'
                  'Commands:\n'
-                 '    !execute [language] -- [code] -> The STDOUT and STDERR output after'
-                 ' execution of [code] in [language].\n'
+                 '    !execute [-d|--debug] <language> -- <code> -> The STDOUT (and STDERR if the debug flag is enabled) output after'
+                 ' execution of <code> in <language>.\n'
                  '    !languages -> List of languages that I support.\n'
                  '\n'
                  'by totallyhuman\n'
@@ -96,7 +99,7 @@ TIOBot = Bot(
     generic_ping = 'Pong!',
     specific_ping = 'Pong!',
     regexes = {
-        r'(?i)^\s*!execute\s+(.+?)\s*--\s*([\s\S]+?)\s*$': execute,
+        r'(?i)^\s*!execute(\s+(?:-d|--debug))?\s+(.+?)\s*--\s*([\s\S]+?)\s*$': execute,
         r'(?i)^\s*!languages\s*$': list_languages,
         r'(?i)^\s*!languages\s+(.+?)\s*$': search_languages
     }
